@@ -2,65 +2,56 @@
 print("Name:Tejaswini M",
        "AUID:1AY24AI111",
        "Section:O")
-def is_valid_chess_position(position):
-    """Check if the board position key is valid, e.g., 'a1' to 'h8'"""
-    if len(position) != 2:
-        return False
-    file, rank = position[0], position[1]
-    return file in 'abcdefgh' and rank in '12345678'
-
-def is_valid_piece(piece):
-    """Check if the piece is valid"""
-    valid_pieces = {'K', 'Q', 'R', 'B', 'N', 'P'}
-    return len(piece) == 2 and piece[0] in {'w', 'b'} and piece[1] in valid_pieces
-
-def validate_chess_board(board):
-    """Validate the chess board dictionary"""
-    if not isinstance(board, dict):
-        return False, "Input is not a dictionary"
+def is_valid_chess_board(board):
+    valid_positions = [f"{file}{rank}" for file in 'abcdefgh' for rank in '12345678']
+    valid_piece_names = ['pawn', 'rook', 'knight', 'bishop', 'queen', 'king']
 
     white_pieces = 0
     black_pieces = 0
-    white_kings = 0
-    black_kings = 0
+    white_pawns = 0
+    black_pawns = 0
 
     for position, piece in board.items():
-        if not is_valid_chess_position(position):
-            return False, f"Invalid board position: {position}"
-        if not is_valid_piece(piece):
-            return False, f"Invalid chess piece: {piece}"
-        if piece[0] == 'w':
+        if position not in valid_positions:
+            return False
+
+        if not (piece.startswith('w') or piece.startswith('b')):
+            return False
+
+        name = piece[1:]
+        if name not in valid_piece_names:
+            return False
+
+        if piece.startswith('w'):
             white_pieces += 1
-            if piece[1] == 'K':
-                white_kings += 1
-        elif piece[0] == 'b':
+            if name == 'pawn':
+                white_pawns += 1
+        else:
             black_pieces += 1
-            if piece[1] == 'K':
-                black_kings += 1
+            if name == 'pawn':
+                black_pawns += 1
 
-    if white_kings != 1:
-        return False, "There must be exactly one white king"
-    if black_kings != 1:
-        return False, "There must be exactly one black king"
-    if white_pieces > 16:
-        return False, "Too many white pieces"
-    if black_pieces > 16:
-        return False, "Too many black pieces"
+    if white_pieces > 16 or black_pieces > 16:
+        return False
+    if white_pawns > 8 or black_pawns > 8:
+        return False
 
-    return True, "Chess board is valid"
+    return True
+       
+# Example use
+board = {
+    'a1': 'wrook', 'b1': 'wknight', 'c1': 'wbishop', 'd1': 'wqueen',
+    'e1': 'wking', 'f1': 'wbishop', 'g1': 'wknight', 'h1': 'wrook',
+    'a2': 'wpawn', 'b2': 'wpawn', 'c2': 'wpawn', 'd2': 'wpawn',
+    'e2': 'wpawn', 'f2': 'wpawn', 'g2': 'wpawn', 'h2': 'wpawn',
+    'a7': 'bpawn', 'b7': 'bpawn', 'c7': 'bpawn', 'd7': 'bpawn',
+    'e7': 'bpawn', 'f7': 'bpawn', 'g7': 'bpawn', 'h7': 'bpawn',
+    'a8': 'brook', 'b8': 'bknight', 'c8': 'bbishop', 'd8': 'bqueen',
+    'e8': 'bking', 'f8': 'bbishop', 'g8': 'bknight', 'h8': 'brook',
+}
 
-# Example usage
-if __name__ == "__main__":
-    board = {
-        "a1": "wR", "b1": "wN", "c1": "wB", "d1": "wQ",
-        "e1": "wK", "f1": "wB", "g1": "wN", "h1": "wR",
-        "a2": "wP", "b2": "wP", "c2": "wP", "d2": "wP",
-        "e2": "wP", "f2": "wP", "g2": "wP", "h2": "wP",
-        "a8": "bR", "b8": "bN", "c8": "bB", "d8": "bQ",
-        "e8": "bK", "f8": "bB", "g8": "bN", "h8": "bR",
-        "a7": "bP", "b7": "bP", "c7": "bP", "d7": "bP",
-        "e7": "bP", "f7": "bP", "g7": "bP", "h7": "bP"
-    }
+print("Valid chess board." if is_valid_chess_board(board) else "Invalid chess board.")
 
-    valid, message = validate_chess_board(board)
-    print(message)
+   
+           
+   
