@@ -2,58 +2,44 @@ print("Name:Tejaswini M",
        "AUID:1AY24AI111",
        "Section:O")
 import time
-import os
 
-# Define grid size
-WIDTH = 10
-HEIGHT = 10
-
-# Create an initial grid (0 = dead, 1 = alive)
-grid = [[0]*WIDTH for _ in range(HEIGHT)]
-
-# Add a simple pattern (a "blinker")
-grid[4][4] = 1
-grid[4][5] = 1
-grid[4][6] = 1
-
-def print_grid(grid):
-    os.system('cls' if os.name == 'nt' else 'clear')
-    for row in grid:
-        for cell in row:
-            print('■' if cell else ' ', end='')
-        print()
+def print_board(board):
+    for row in board:
+        print(''.join(['█' if cell else ' ' for cell in row]))
     print()
 
-def get_neighbors(x, y, grid):
+def get_neighbors(board, x, y):
     neighbors = 0
-    for i in [-1, 0, 1]:
-        for j in [-1, 0, 1]:
-            if i == 0 and j == 0:
+    rows, cols = len(board), len(board[0])
+    for i in range(x-1, x+2):
+        for j in range(y-1, y+2):
+            if (i == x and j == y) or i < 0 or j < 0 or i >= rows or j >= cols:
                 continue
-            ni, nj = y + i, x + j
-            if 0 <= ni < HEIGHT and 0 <= nj < WIDTH:
-                neighbors += grid[ni][nj]
+            neighbors += board[i][j]
     return neighbors
 
-def next_generation(grid):
-    new_grid = [[0]*WIDTH for _ in range(HEIGHT)]
-    for y in range(HEIGHT):
-        for x in range(WIDTH):
-            neighbors = get_neighbors(x, y, grid)
-            if grid[y][x] == 1:
-                if neighbors == 2 or neighbors == 3:
-                    new_grid[y][x] = 1
-            else:
-                if neighbors == 3:
-                    new_grid[y][x] = 1
-    return new_grid
+def next_generation(board):
+    rows, cols = len(board), len(board[0])
+    new_board = [[0]*cols for _ in range(rows)]
+    for i in range(rows):
+        for j in range(cols):
+            neighbors = get_neighbors(board, i, j)
+            if board[i][j] == 1 and neighbors in [2, 3]:
+                new_board[i][j] = 1
+            elif board[i][j] == 0 and neighbors == 3:
+                new_board[i][j] = 1
+    return new_board
 
-# Run the simulation
-try:
-  while True:
-        print_grid(grid)
-        grid = next_generation(grid)
-        time.sleep(0.5)
-except KeyboardInterrupt:
-    print("\nGame stopped.")
+# Example: glider pattern
+board = [
+    [0, 1, 0],
+    [0, 0, 1],
+    [1, 1, 1],
+]
+
+for _ in range(10):
+    print_board(board)
+    board = next_generation(board)
+    time.sleep(0.5)
+
 
