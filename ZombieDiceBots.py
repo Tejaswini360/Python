@@ -2,38 +2,31 @@
 print("Name:Tejaswini M",
        "AUID:1AY24AI111",
        "Section:O")
-import zombiedice
+import random
 
-class CautiousBot:
-    """Stops after getting 1 brain"""
-    def __init__(self, name):
-        self.name = name
+def roll_dice():
+    return [random.choice(['brain', 'shotgun', 'footsteps']) for _ in range(3)]
 
-    def turn(self, game_state):
-        dice_roller = zombiedice.roll()  # First roll
-        brains = 0
-
-        while dice_roller is not None:
-            for die in dice_roller:
-                if die['brain']:
-                    brains += 1
-            if brains >= 1:
-                break  # Stop after 1 brain
-            dice_roller = zombiedice.roll()  # Roll again
-
-class RiskyBot:
-    """Keeps rolling until 2 shotguns"""
-    def __init__(self, name):
-        self.name = name
-
-    def turn(self, game_state):
-        shotguns = 0
-        dice_roller = zombiedice.roll()
+def simple_bot_turn():
+    brains = 0
+    shotguns = 0
+    print("SimpleBot's turn:")
+    while True:
+        roll = roll_dice()
+        brains += roll.count('brain')
+        shotguns += roll.count('shotgun')
+        print(f"Rolled: {roll} | Brains: {brains}, Shotguns: {shotguns}")
         
-        while dice_roller is not None:
-            for die in dice_roller:
-                if die['shotgun']:
-                    shotguns += 1
-            if shotguns >= 2:
-                break  # Too dangerous
-            dice_roller = zombiedice.roll()
+        if shotguns >= 3:
+            print("BUSTED! Lost all brains.")
+            return 0
+        
+        # Simple strategy: stop if 2 shotguns
+        if shotguns >= 2:
+            print(f"Stopping with {brains} brains.")
+            return brains
+
+# Run one turn
+simple_bot_turn()
+
+           
