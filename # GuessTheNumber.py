@@ -17,16 +17,4 @@ while guess != number:
     else:
         print("You got it! Congratulations!")
 
-#output:
-
-Name: Tejaswini M
-USN: 1AY24AI111
-Section: O
-Guess a number between 1 and 10:
-Your guess: 7
-Too high!
-Your guess: 4
-You got it! Congratulations!
-
-
 
