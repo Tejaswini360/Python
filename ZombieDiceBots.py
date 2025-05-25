@@ -1,9 +1,8 @@
 # ZombieDiceBots.py
+import random
 print("Name:Tejaswini M",
        "AUID:1AY24AI111",
        "Section:O")
-import random
-
 def roll_dice():
     return [random.choice(['brain', 'shotgun', 'footsteps']) for _ in range(3)]
 
@@ -28,5 +27,3 @@ def simple_bot_turn():
 
 # Run one turn
 simple_bot_turn()
-
-           
