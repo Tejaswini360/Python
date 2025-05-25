@@ -5,7 +5,7 @@ import time
 
 def print_board(board):
     for row in board:
-        print(''.join(['█' if cell else ' ' for cell in row]))
+        print(''.join(['*' if cell else ' ' for cell in row]))
     print()
 
 def get_neighbors(board, x, y):
